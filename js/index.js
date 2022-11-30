@@ -1,6 +1,6 @@
 import { modalProduct, catalogList } from './elements.js';
-import { createCardProduct } from './createCardProduct.js';
 import { openModal } from './openModal.js';
+import { renderListProduct } from './renderListProduct.js';
 
 const burgerMax = {
   title: 'Бургер Макс',
@@ -17,9 +17,6 @@ const burgerMax = {
     'Соус горчичный',
   ],
 };
-
-catalogList.textContent = '';
-catalogList.append(createCardProduct(burgerMax));
 
 catalogList.addEventListener('click', ({ target }) => {
   if (target.closest('.product__detail') || target.closest('.product__image')) {
@@ -39,3 +36,9 @@ document.addEventListener('keydown', (e) => {
     modalProduct.classList.remove('modal_open');
   }
 });
+
+const init = () => {
+  renderListProduct();
+};
+
+init();
