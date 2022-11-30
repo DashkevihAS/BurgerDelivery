@@ -1,6 +1,7 @@
 import { modalProduct, catalogList } from './elements.js';
 import { openModal } from './openModal.js';
 import { renderListProduct } from './renderListProduct.js';
+import { navigationListController } from './navigationListController.js';
 
 const burgerMax = {
   title: 'Бургер Макс',
@@ -39,6 +40,7 @@ document.addEventListener('keydown', (e) => {
 
 const init = () => {
   renderListProduct();
+  navigationListController();
 };
 
 init();

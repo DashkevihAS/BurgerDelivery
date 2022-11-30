@@ -17,3 +17,9 @@ export const ingredientsCalories = document.querySelector(
 export const modalProductPriceCount = document.querySelector(
   '.modal-product__price-count',
 );
+
+export const navigationList = document.querySelector('.navigation__list');
+export const navigationListItems = document.querySelectorAll(
+  '.navigation__button',
+);
+export const catalogTitle = document.querySelector('.catalog__title');
