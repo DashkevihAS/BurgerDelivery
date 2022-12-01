@@ -39,8 +39,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 const init = () => {
-  renderListProduct();
-  navigationListController();
+  navigationListController(renderListProduct);
 };
 
 init();

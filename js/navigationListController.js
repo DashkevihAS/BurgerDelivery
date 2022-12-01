@@ -3,9 +3,8 @@ import {
   navigationList,
   catalogTitle,
 } from './elements.js';
-import { renderListProduct } from './renderListProduct.js';
 
-export const navigationListController = () => {
+export const navigationListController = (cb) => {
   navigationList.addEventListener('click', ({ target }) => {
     if (!target.closest('.navigation__button')) return;
 
@@ -18,6 +17,6 @@ export const navigationListController = () => {
     catalogTitle.textContent = title;
 
     const category = target.dataset.category;
-    renderListProduct(category);
+    cb(category);
   });
 };
