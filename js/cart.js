@@ -2,35 +2,31 @@ import {
   catalogList,
   countAmount,
   modalProductAdd,
+  order,
   orderCount,
   orderList,
+  orderSubmit,
   orderTotalAmount,
+  orderWrapTitle,
 } from './elements.js';
 import { getData } from './getData.js';
 import { PREFIX_PRODUCT, API_URL } from './const.js';
 
 const getCart = () => {
   const cartList = localStorage.getItem('cart');
-  if (cartList) {
-    return JSON.parse(cartList);
-  } else {
-    return [];
-  }
+
+  return cartList ? JSON.parse(cartList) : [];
 };
 
 const renderCartList = async () => {
   const cartList = getCart();
 
-  if (!cartList.length) {
-    orderList.textContent = '';
-    orderCount.textContent = 0;
-    orderTotalAmount.textContent = 0;
-    return;
-  }
+  orderSubmit.disabled = !cartList.length;
 
   const allId = cartList.map((item) => item.id);
-
-  const data = await getData(`${API_URL}${PREFIX_PRODUCT}?list=${allId}`);
+  const data = cartList.length
+    ? await getData(`${API_URL}${PREFIX_PRODUCT}?list=${allId}`)
+    : [];
 
   orderCount.textContent = cartList.reduce((sum, item) => sum + item.count, 0);
   orderTotalAmount.textContent = data.reduce(
@@ -44,7 +40,9 @@ const renderCartList = async () => {
     const li = document.createElement('li');
     li.classList.add('order__item');
     li.dataset.idProduct = item.id;
+
     const product = cartList.find((cartItem) => cartItem.id === item.id);
+
     li.innerHTML = `
       <img
         src=${API_URL}/${item.image}
@@ -91,16 +89,17 @@ const addCartItem = (id, count = 1) => {
   }
   updateCartList(cartList);
 };
-const removeCartItem = (id, count) => {
+const removeCartItem = (id) => {
   const cartList = getCart();
-  const product = cartList.find((item) => item.id === id);
-  if (count > 1) {
-    product.count -= 1;
-    updateCartList(cartList);
-  } else {
-    const filteredCardList = cartList.filter((item) => item.id !== id);
-    updateCartList(filteredCardList);
+  const productIndex = cartList.findIndex((item) => item.id === id);
+
+  cartList[productIndex].count -= 1;
+
+  if (cartList[productIndex].count < 1) {
+    cartList.splice(productIndex, 1);
   }
+
+  updateCartList(cartList);
 };
 
 const cartController = () => {
@@ -112,10 +111,10 @@ const cartController = () => {
   });
 
   modalProductAdd.addEventListener('click', ({ target }) => {
-    const modalProductAdd = target.closest('.modal-product__btn');
+    const modalProductBtn = target.closest('.modal-product__btn');
 
-    if (modalProductAdd) {
-      const id = modalProductAdd.dataset.idProduct;
+    if (modalProductBtn) {
+      const id = modalProductBtn.dataset.idProduct;
       const count = +countAmount.textContent;
       addCartItem(id, count);
     }
@@ -126,23 +125,25 @@ const cartController = () => {
     }
 
     if (target.closest('.count__minus')) {
-      if (target.nextElementSibling.textContent > 1) {
+      if (+target.nextElementSibling.textContent > 1) {
         target.nextElementSibling.textContent -= 1;
       }
     }
   });
 
   orderList.addEventListener('click', ({ target }) => {
+    const id = target.closest('.order__item').dataset.idProduct;
+
     if (target.closest('.count__plus')) {
-      const id = target.closest('.order__item').dataset.idProduct;
       addCartItem(id);
     }
-
     if (target.closest('.count__minus')) {
-      const id = target.closest('.order__item').dataset.idProduct;
-      const count = +target.nextElementSibling.textContent;
-      removeCartItem(id, count);
+      removeCartItem(id);
     }
+  });
+
+  orderWrapTitle.addEventListener('click', () => {
+    order.classList.toggle('order_open');
   });
 };
 
