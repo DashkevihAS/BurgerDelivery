@@ -11,6 +11,7 @@ import {
 } from './elements.js';
 import { getData } from './getData.js';
 import { PREFIX_PRODUCT, API_URL } from './const.js';
+import { orderController } from './orderController.js';
 
 const getCart = () => {
   const cartList = localStorage.getItem('cart');
@@ -150,4 +151,5 @@ const cartController = () => {
 export const cartInit = () => {
   cartController();
   renderCartList();
+  orderController(getCart, updateCartList);
 };

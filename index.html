@@ -348,11 +348,15 @@
                 class="modal-delivery__input"
                 type="text"
                 placeholder="Ваше имя"
+                name="name"
+                required
               />
               <input
                 class="modal-delivery__input"
                 type="tel"
                 placeholder="Телефон"
+                name="phone"
+                required
               />
             </fieldset>
 
@@ -363,6 +367,7 @@
                   type="radio"
                   name="format"
                   value="pickup"
+                  checked
                 />
                 <span>Самовывоз</span>
               </label>
@@ -378,21 +383,27 @@
               </label>
             </fieldset>
 
-            <fieldset class="modal-delivery__fieldset-input">
+            <fieldset
+              class="modal-delivery__fieldset-input modal-delivery__fieldset-input_hide"
+              name="address-info"
+            >
               <input
                 class="modal-delivery__input"
                 type="text"
                 placeholder="Улица, дом, квартира"
+                name="address"
               />
               <input
                 class="modal-delivery__input modal-delivery__input_half"
                 type="number"
                 placeholder="Этаж"
+                name="floor"
               />
               <input
                 class="modal-delivery__input modal-delivery__input_half"
                 type="number"
                 placeholder="Домофон"
+                name="intercom"
               />
             </fieldset>
           </form>
