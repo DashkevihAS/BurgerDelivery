@@ -14,6 +14,13 @@ export const orderController = (getCart, updateCartList) => {
     }
   });
 
+  modalDeliveryForm.phone.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+  });
+  modalDeliveryForm.name.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\d/g, '');
+  });
+
   modalDeliveryForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(modalDeliveryForm);
@@ -21,7 +28,7 @@ export const orderController = (getCart, updateCartList) => {
     const data = Object.fromEntries(formData);
     data.order = getCart();
 
-    fetch('https://63895b67c5356b25a2feb4a8.mockapi.io/order', {
+    fetch('https://jsonplaceholder.typicode.com/posts', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -37,12 +44,15 @@ export const orderController = (getCart, updateCartList) => {
         return res.json();
       })
       .then((data) => {
-        modalDeliveryForm.textContent = '';
-        const div = document.createElement('div');
-        div.innerHTML = `
-          <p>Ваш заказ: ${data.id} принят, менеджер ${data.manager}</p>
+        const p = document.createElement('p');
+        p.textContent = `
+        ${data.name},ваш заказ ${data.id} принят, c вами свяжется менеджер по телефону ${data.phone}
         `;
-        modalDeliveryForm.append(div);
+
+        modalDeliveryForm.append(p);
+        setTimeout(() => {
+          p.remove();
+        }, 8000);
         console.log(data);
       });
   });
